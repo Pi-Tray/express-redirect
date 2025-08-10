@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Pi-Tray-Editor...</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 40px; background-color: #f4f4f9; color: #333; }
+        .container { background: white; padding: 20px 40px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block; }
+        code { background-color: #eee; padding: 2px 6px; border-radius: 4px; }
+        a { color: #007bff; }
+        .error { color: #d93025; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="message-container">
+        <h1>Redirecting...</h1>
+        <p>Preparing to install a package in Pi-Tray-Editor.</p>
+        <p>If you are not automatically redirected, <a id="fallback-link" href="#">click this link</a>.</p>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const message_container = document.getElementById("message-container");
+        const fallback_link = document.getElementById('fallback-link');
+
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const pkgname = params.get("pkgname");
+
+          if (!pkgname || pkgname.trim() === "") {
+            throw new Error("The <code>pkgname</code> parameter is missing or empty.");
+          }
+
+          const base_url = "pi-tray-editor://express/";
+          const final_url = new URL(pkgname, base_url);
+
+          fallback_link.href = final_url;
+          window.location.replace(final_url);
+        } catch (error) {
+          console.error(error);
+          message_container.innerHTML = `<h1 class="error">Redirect failed!</h1>`;
+        }
+      });
+    </script>
+
+</body>
+</html>
