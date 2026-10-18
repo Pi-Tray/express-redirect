@@ -28,14 +28,14 @@
 
         try {
           const params = new URLSearchParams(window.location.search);
-          const pkgname = params.get("pkgname");
+          const spec = params.get("spec");
 
-          if (!pkgname || pkgname.trim() === "") {
-            throw new Error("The <code>pkgname</code> parameter is missing or empty.");
+          if (!spec || spec.trim() === "") {
+            throw new Error("The <code>spec</code> parameter is missing or empty.");
           }
 
-          const base_url = "pi-tray-editor://install/";
-          const final_url = new URL(pkgname, base_url);
+          const final_url = new URL("pi-tray-editor://install/");
+          final_url.searchParams.set("spec", spec);
 
           fallback_link.href = final_url;
           window.location.replace(final_url);
